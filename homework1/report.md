@@ -1,3 +1,6 @@
+# 作业1 
+代码如下：
+```python
 import torch
 from PIL import Image
 import numpy as np
@@ -52,3 +55,6 @@ if __name__ == "__main__":
     # 保存结果
     pred_img = (pred.numpy() * 255).astype(np.uint8)
     Image.fromarray(pred_img).save("homework1/test_output1.png")
+```
+测试结果如下：
+![test_output.png](test_output.png)
