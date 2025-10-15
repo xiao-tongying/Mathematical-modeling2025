@@ -5,7 +5,6 @@ import torch
 from PIL import Image
 import numpy as np
 
-# ---- 多项式特征映射 (11 维) ----
 def poly_features(rgb):
     r, g, b = rgb[..., 0], rgb[..., 1], rgb[..., 2]
     feats = [
@@ -14,15 +13,13 @@ def poly_features(rgb):
         r * g, r * b, g * b,
         r * g * b
     ]
-    return torch.stack(feats, dim=-1)  # (..., 11)
+    return torch.stack(feats, dim=-1) 
 
-# ---- 读图 & 转张量 ----
 def load_image(path):
     img = Image.open(path).convert("RGB")
     arr = np.asarray(img).astype(np.float32) / 255.0
     return torch.from_numpy(arr)
 
-# ---- 最小二乘训练 ----
 def train(X, Y, lam=1e-6):
     # X: (N, 11), Y: (N, 3)
     XT = X.T
@@ -31,14 +28,12 @@ def train(X, Y, lam=1e-6):
     W = torch.linalg.inv(A + lam * I) @ XT @ Y
     return W  # (11, 3)
 
-# ---- 应用模型 ----
 def apply(W, img):
     feats = poly_features(img)
     out = feats @ W
     out = out.clamp(0, 1)
     return out
 
-# ---- 主流程 ----
 if __name__ == "__main__":
     # 训练集
     src = load_image("homework1/input.png")   # 输入图
